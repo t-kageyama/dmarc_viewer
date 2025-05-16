@@ -1,0 +1,37 @@
+<!--
+   This file is the the descriptor for how to build the zip file for distribution.
+   The structure of the zip in an exploded view is as
+   follows:
+   /<project name>
+     /bin
+     /conf
+     /lib
+-->
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+	<id>dist</id>
+	<formats>
+		<format>zip</format>
+		<!--<format>tar.gz</format>-->
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+
+	<dependencySets>
+		<dependencySet>
+			<scope>runtime</scope>
+			<outputDirectory>lib</outputDirectory>
+		</dependencySet>
+	</dependencySets>
+
+	<!-- Define the sets of files to be included into the zip file.-->
+	<fileSets>
+		<fileSet>
+			<directory>target</directory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+			<outputDirectory>dmarc_viewer</outputDirectory>
+		</fileSet>
+	</fileSets>
+</assembly>
