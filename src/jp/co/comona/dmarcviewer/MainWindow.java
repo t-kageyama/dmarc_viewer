@@ -1,5 +1,6 @@
 package jp.co.comona.dmarcviewer;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -17,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 
 import jp.co.comona.dmarcviewer.record.AuthResultRecordThread;
 import jp.co.comona.dmarcviewer.record.OrderBy;
@@ -102,6 +105,7 @@ public class MainWindow extends SubWindow implements RecordListTableContainer {
 
 		shell.open();
 		shell.layout();
+		setIcon(shell);
 
 		if (tool.getConnection() != null) {
 			searchRecords();
@@ -124,6 +128,16 @@ public class MainWindow extends SubWindow implements RecordListTableContainer {
 		}
 
 		display.dispose();
+	}
+
+	/**
+	 * set icon to shell.
+	 * @param shell shell to set icon.
+	 */
+	protected void setIcon(Shell shell) {
+		if ((new File("DMarcViwer.ico")).exists()) {
+			shell.setImage(new Image(display, "DMarcViwer.ico"));
+		}
 	}
 
 	// MARK: - Getters & Setters
