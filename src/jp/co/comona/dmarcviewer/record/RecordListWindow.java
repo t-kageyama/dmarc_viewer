@@ -259,9 +259,10 @@ public class RecordListWindow extends SubWindow implements RecordListTableContai
 	 */
 	private void onStoreButton(SelectionEvent e) {
 		String error = null;
+		List<Record> storeRecords = mergeStoreRecords();
 		try {
-			Record.delete(records, tool.getConnection());	// delete org_name, report_id first.
-			Record.insert(records, tool.getConnection());	// then insert.
+			Record.delete(storeRecords, tool.getConnection());	// delete org_name, report_id first.
+			Record.insert(storeRecords, tool.getConnection());	// then insert.
 			mainWindow.searchAfterStore();
 			onCloseButton(e);
 		}
@@ -298,5 +299,28 @@ public class RecordListWindow extends SubWindow implements RecordListTableContai
 	private Record getSelectedRecord() {
 		int index = table.getSelectionIndex();
 		return records.get(index);
+	}
+
+	// MARK: - Check dmarc_records table duplication
+	/**
+	 * merge records.
+	 * @return merged record list.
+	 */
+	private List<Record> mergeStoreRecords() {
+		List<Record> storeRecords = new ArrayList<>();
+		if ((records != null) && (records.size() > 0)) {
+			for (int i = records.size() - 1; i > 0; i--) {
+				Record rec = records.get(i);
+				Record prevRec = records.get(i - 1);
+				if (rec.isDuplicateKey(prevRec)) {
+					prevRec.mergeRecord(rec);
+					
+				} else {
+					storeRecords.add(0, rec);
+				}
+			}
+			storeRecords.add(0, records.get(0));
+		}
+		return storeRecords;
 	}
 }

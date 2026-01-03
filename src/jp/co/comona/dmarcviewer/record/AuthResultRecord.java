@@ -137,6 +137,14 @@ public class AuthResultRecord {
 	}
 
 	/**
+	 * set new row.
+	 * @param row
+	 */
+	protected void setRow(int row) {
+		this.row = row;
+	}
+
+	/**
 	 * get domain.
 	 * @return domain.
 	 */

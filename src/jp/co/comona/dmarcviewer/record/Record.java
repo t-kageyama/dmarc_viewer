@@ -731,4 +731,43 @@ public class Record implements RecordColumns {
 	private static String whereColName(String table, String column) {
 		return table + "." + column;
 	}
+
+	// MARK: - Merge Record.
+	/**
+	 * check key is duplicate or not.
+	 * @param compareRec comparing record.
+	 * @return true if key is duplicate.
+	 */
+	protected boolean isDuplicateKey(Record compareRec) {
+		return org_name.equals(compareRec.org_name) && report_id.equals(compareRec.report_id) && source_ip.equals(compareRec.source_ip);
+	}
+
+	/**
+	 * merge record.
+	 * @param mergeRec record to merge.
+	 */
+	protected void mergeRecord(Record mergeRec) {
+		count += mergeRec.count;
+		if (disposition.contains(mergeRec.disposition) == false) {
+			disposition += "," + mergeRec.disposition;
+		}
+		if (dkim.contains(mergeRec.dkim) == false) {
+			dkim += "," + mergeRec.dkim;
+		}
+		if (spf.contains(mergeRec.spf) == false) {
+			spf += "," + mergeRec.spf;
+		}
+
+		dkims.addAll(mergeRec.dkims);
+		int row = dkims.get(0).getRow();
+		for (int i = 1; i < dkims.size(); i++) {
+			dkims.get(i).setRow(row + i);
+		}
+
+		spfs.addAll(mergeRec.spfs);
+		row = spfs.get(0).getRow();
+		for (int i = 1; i < spfs.size(); i++) {
+			spfs.get(i).setRow(row + i);
+		}
+	}
 }
